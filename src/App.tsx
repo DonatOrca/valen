@@ -9,12 +9,12 @@ const title_data = [
 ]
 
 function App() {
-    const [index, setIndex] = useState(2);
+    const [index, setIndex] = useState(0);
     const titleContainerRef = useRef<HTMLDivElement | null>(null);
 
     useGSAP(() => {
         const tl = gsap.timeline({ repeat: -1 });
-        tl.to(".quote", { opacity: 0, duration: 1, delay: 2})  
+        tl.to(".quote", { opacity: 0, duration: 1, delay: 4})  
             .call(() => setIndex((prev) => (prev + 1) % title_data.length))
             .to(".quote", { opacity: 1, duration: 1 });
     }, { scope: titleContainerRef });
