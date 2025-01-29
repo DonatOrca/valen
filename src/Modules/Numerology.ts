@@ -9,6 +9,9 @@ for (let i = 0; i < numerology_pattern.length; i++) {
 
 const modify_name = (name: String) => name.toLowerCase().replace(/\s+/g, '');
 
+// TODO
+// Should we add 'shifting'? Y'know, the ones from like Vignere Ciphers
+
 export const get_numerology = (name: String) => {
     name = modify_name(name);
     let total_numerology = 0;
