@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './styles//index.css';
+
 import Splash from './Splash';
 import reportWebVitals from './reportWebVitals';
+
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
-import { hashStringToNumber } from './modules/Session';
 
+import './styles//index.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 gsap.registerPlugin(useGSAP);
 
@@ -23,7 +25,3 @@ root.render(
 );
 
 reportWebVitals(console.log);
-
-// hash testing
-const names = ["John Doe", "Alice Smith", "Emmanuel De Guzman"]
-names.forEach(name => console.log("Original name: ", name, "Hashed index: ", hashStringToNumber(name)))
