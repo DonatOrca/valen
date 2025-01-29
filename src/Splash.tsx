@@ -107,6 +107,7 @@ function Splash() {
   }, { scope: introContainerRef })
   
   return (
+    <>
     <div id='container' className='bg-slate-50 relative overflow-hidden h-full'>
       <div className='relative' id='intro-container' ref={introContainerRef}>
         <div
@@ -128,6 +129,10 @@ function Splash() {
         <App />
       </div>
     </div>
+    <footer className="fixed bottom-1 w-full flex flex-col justify-center place-items-center">
+      <span className='text-xs font-extralight'>© 2025 Developers of Next Advanced Technology</span>
+    </footer>
+    </>
   );
 }
 
