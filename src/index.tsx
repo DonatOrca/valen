@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles//index.css';
-import App from './App';
+import Splash from './Splash';
 import reportWebVitals from './reportWebVitals';
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
@@ -16,9 +16,9 @@ const root = ReactDOM.createRoot(
 root.render(
   process.env.NODE_ENV === 'development' ? (
     <React.StrictMode>
-      <App />
+      <Splash />
     </React.StrictMode>
-  ) : <App />
+  ) : <Splash />
 );
 
 reportWebVitals(console.log);
