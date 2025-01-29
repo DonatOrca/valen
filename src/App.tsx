@@ -35,16 +35,16 @@ function App() {
             </div>
         </div>
         <div className="app-content h-auto w-full flex items-start justify-center">
-            <div className="w-full px-5 sm:px-10 md:px-20 lg:px-32 my-12">
+            <div className="w-full pl-10 md:pl-20 lg:pl-32 my-12">
                 <div className="text-gray-950 max-w-screen-lg mx-auto">
                     <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-extrabold mb-5">
                         What to expect
                     </h1>
-                    <div className="mx-5 sm:mx-10 md:mx-20 my-3 text-gray-600 text-xs sm:text-sm md:text-base">
+                    <div className="mx-5 sm:mx-10 md:mx-20 my-3 text-gray-600 text-[8px]">
                         <ol className="list-disc pl-5">
-                            <li><p>A numerology test to determine your name compatibility</p></li>
-                            <li><p>Five personal questions for deeper insight</p></li>
-                            <li><p>Five situational questions to understand your bond</p></li>
+                            <li><p className="text-xs sm:text-sm md:text-base">A numerology test to determine your name compatibility</p></li>
+                            <li><p className="text-xs sm:text-sm md:text-base">Five personal questions for deeper insight</p></li>
+                            <li><p className="text-xs sm:text-sm md:text-base">Five situational questions to understand your bond</p></li>
                         </ol>
                     </div>
                     <p className="text-xs sm:text-sm mx-5 sm:mx-7 text-gray-400">
@@ -55,7 +55,7 @@ function App() {
                     </p>
                 </div>
             </div>
-            <div className="w-full grid grid-cols-1 xl:grid-cols-3 place-items-center gap-5 my-14 pr-32 text-purple-800 font-serif">
+            <div className="w-full grid grid-cols-1 xl:grid-cols-3 place-items-center gap-5 my-14 pr-10 md:pr-20 lg:pr-32 text-purple-800 font-serif">
                 <div className="bg-[rgb(254,243,251)] p-4 rounded-xl shadow-lg flex flex-col items-center w-full max-w-xs mx-auto h-full">
                     <i className="fa-solid fa-heart text-4xl text-red-500"></i>
                     <hr className="border-gray-300 w-1/2 my-2" />
@@ -102,7 +102,7 @@ function App() {
                     </div>
                 </div>
 
-                <hr className="border-gray-500 w-1/6 my-2 mx-auto" />
+                <hr className="border-gray-300 w-1/6 my-2 mx-auto" />
                 <p className="text-[6px] sm:text-xs font-extralight">© 2025 Developers of Next Advanced Technology</p>
             </div>
         </>
