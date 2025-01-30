@@ -39,8 +39,8 @@ function Splash() {
       heart.classList.add("heart-object");
       heart.style.opacity = "0";
 
-      if (goalX > 0) heart.src = '/heart-icon-right.png';
-      else heart.src = '/heart-icon-left.png';
+      if (goalX > 0) heart.src = '/assets/heart-icon-right.png';
+      else heart.src = '/assets/heart-icon-left.png';
       heartsArray.push({ heart, goalX, goalY, scale });
     }
     return heartsArray;
@@ -137,7 +137,7 @@ function Splash() {
   
   return (
     <>
-    <div id='container' className='bg-white relative overflow-hidden h-full'>
+    <div id='container' className='relative overflow-hidden h-full'>
       <div className='relative' id='intro-container' ref={introContainerRef}>
         <div
           ref={heartsContainerRef}
@@ -145,7 +145,7 @@ function Splash() {
           style={{willChange: 'transform, opacity, transform3d'}}
         ></div>
         <div className='h-screen flex justify-center place-items-center'>
-          <img ref={logoRef} src='/logo.png' alt='logo' className='w-64 h-64' />
+          <img ref={logoRef} src='/assets/logo.png' alt='logo' className='w-64 h-64' />
           <div className='flex flex-col absolute' ref={textContainerRef} style={{visibility: 'hidden'}}>
             <h1 className='lg:text-5xl text-3xl font-bold text-slate-800 text-center'>
               Love Compatibility Test

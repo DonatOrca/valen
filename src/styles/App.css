@@ -5,13 +5,16 @@ div#container {
     
 div.app-header {
     background: rgb(255, 221, 245);
-    background: -moz-linear-gradient(0deg, rgba(255,233,249,1) 0%, rgba(254,243,251,1) 11%, rgba(255,255,255,1) 66%);
-    background: -webkit-linear-gradient(0deg, rgba(255,233,249,1) 0%, rgba(254,243,251,1) 11%, rgba(255,255,255,1) 66%);
-    background: linear-gradient(0deg, rgba(255, 221, 245, 1) 0%, rgba(254,243,251,1) 50%, rgba(255,255,255,1) 66%);
+    background: -moz-linear-gradient(0deg, rgba(255,233,249,1) 0%, rgba(254,243,251,1) 11%, var(--light) 66%);
+    background: -webkit-linear-gradient(0deg, rgba(255,233,249,1) 0%, rgba(254,243,251,1) 11%, var(--light) 66%);
+    background: linear-gradient(0deg, rgba(255, 221, 245, 1) 0%, rgba(254,243,251,1) 50%, var(--light) 66%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffe9f9",endColorstr="#f8fafc",GradientType=1);
 }
-div.app-content {
-    background-color: rgba(255, 221, 245, 1);
+
+@media (min-width: 1280px) {
+    div.app-content-cut {
+        background: linear-gradient(180deg, rgba(255, 221, 245, 1) 0%, rgba(255, 221, 245, 1) 25%, var(--light) 25%, var(--light) 100%);
+    }
 }
 
 .heart-object {

@@ -1,6 +1,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import React, { useRef, useState } from "react";
+import InfoCard from "./components/InfoCard";
 
 const title_data = [
     {quote:'Embody the word of Love, are we truly meant to be?', colors: ['F5393F', "920A0E", "64070A"]},
@@ -34,53 +35,37 @@ function App() {
                 </button>
             </div>
         </div>
-        <div className="app-content h-auto w-full flex items-start justify-center">
-            <div className="w-full pl-10 md:pl-20 lg:pl-32 my-12">
-                <div className="text-gray-950 max-w-screen-lg mx-auto">
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-extrabold mb-5">
-                        What to expect
-                    </h1>
-                    <div className="mx-5 sm:mx-10 md:mx-20 my-3 text-gray-600 text-[8px]">
-                        <ol className="list-disc pl-5">
-                            <li><p className="text-xs sm:text-sm md:text-base">A numerology test to determine your name compatibility</p></li>
-                            <li><p className="text-xs sm:text-sm md:text-base">Five personal questions for deeper insight</p></li>
-                            <li><p className="text-xs sm:text-sm md:text-base">Five situational questions to understand your bond</p></li>
-                        </ol>
-                    </div>
-                    <p className="text-xs sm:text-sm mx-5 sm:mx-7 text-gray-400">
-                        By taking the test, you agree to provide personal information (name, gender, age, email).
-                    </p>
-                    <p className="text-xs sm:text-sm mx-5 sm:mx-7 text-gray-400">
-                        The developers are not accountable for emotional or mental outcomes following the test.
-                    </p>
-                </div>
+        <div className="app-content-cut h-auto w-full flex flex-row-reverse xl:flex-col items-center justify-center px-8 md:px-16 lg:px-32">
+            <div className="w-auto   grid grid-cols-1 xl:grid-cols-3 place-items-center gap-5 mx-10 xl:mx-0 my-5 xl:mt-10 xl:my-0 text-purple-800 font-serif">
+                <InfoCard title="Learn the love" content="Unravel how your love resonates with your partner!" icon_properties={{font_awesome: "fa-solid fa-heart", color: "text-red-500"}} color="text-purple-900" rounded="xl:rounded-l-xl rounded-t-xl xl:rounded-none" />
+                <InfoCard title="Flow and sow" content="Learn how fate may guide your paths!" icon_properties={{font_awesome: "fa-solid fa-clock", color: "text-fuchsia-400"}} color="text-purple-900" />
+                <InfoCard title="Learn the love" content="Discover out your love language and how it connects!" icon_properties={{font_awesome: "fa-solid fa-user-group", color: "text-purple-700"}} color="text-purple-900" rounded="xl:rounded-r-xl rounded-b-xl xl:rounded-none" />
             </div>
-            <div className="w-full grid grid-cols-1 xl:grid-cols-3 place-items-center gap-5 my-14 pr-10 md:pr-20 lg:pr-32 text-purple-800 font-serif">
-                <div className="bg-[rgb(254,243,251)] p-4 rounded-xl shadow-lg flex flex-col items-center w-full max-w-xs mx-auto h-full">
-                    <i className="fa-solid fa-heart text-4xl text-red-500"></i>
-                    <hr className="border-gray-300 w-1/2 my-2" />
-                    <h1 className="font-extrabold text-sm sm:text-sm md:text-lg my-1">Learn the love</h1>
-                    <p className="text-xs md:text-sm text-purple-900 text-center">Unravel how your love resonates with your partner!</p>
+            <div className="text-gray-950 max-w-screen-lg mx-auto my-10">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-extrabold mb-5 xl:text-center">
+                    What to expect
+                </h1>
+                <div className="mx-5 sm:mx-10 md:mx-20 xl:mx-30 xl:text-center my-3 text-gray-600 text-[8px]">
+                    <ol className="list-disc pl-5">
+                        <li><p className="text-xs sm:text-sm md:text-base">A numerology test to determine your name compatibility</p></li>
+                        <li><p className="text-xs sm:text-sm md:text-base">Five personal questions for deeper insight</p></li>
+                        <li><p className="text-xs sm:text-sm md:text-base">Five situational questions to understand your bond</p></li>
+                    </ol>
                 </div>
-
-                <div className="bg-[rgb(254,243,251)] p-4 rounded-xl shadow-lg flex flex-col items-center w-full max-w-xs mx-auto h-full">
-                    <i className="fa-solid fa-clock text-4xl text-fuchsia-400"></i>
-                    <hr className="border-gray-300 w-1/2 my-2" />
-                    <h1 className="font-extrabold text-sm sm:text-sm md:text-lg my-1">Flow and sow</h1>
-                    <p className="text-xs md:text-sm text-purple-900 text-center">Discover how fate may guide your paths!</p>
-                </div>
-
-                <div className="bg-[rgb(254,243,251)] p-4 rounded-xl shadow-lg flex flex-col items-center w-full max-w-xs mx-auto h-full">
-                    <i className="fa-solid fa-user-group text-4xl text-purple-700"></i>
-                    <hr className="border-gray-300 w-1/2 my-2" />
-                    <h1 className="font-extrabold text-sm sm:text-sm md:text-lg my-1">Find your language</h1>
-                    <p className="text-xs md:text-sm text-purple-900 text-center">Discover out your love language and how it connects!</p>
-                </div>
+                <p className="text-xs sm:text-sm mx-5 sm:mx-7 text-gray-400  xl:text-center">
+                    By taking the test, you agree to provide personal information (name, gender, age, email).<br />
+                    The developers are not accountable for emotional or mental outcomes following the test.
+                </p>
             </div>
         </div>
-        <div className="w-full h-[12vh] flex flex-col justify-center items-center text-gray-500">
-                <div className="w-full flex flex-col sm:flex-row justify-center gap-10 px-5 sm:px-0">
-                    <div className="text-center sm:text-end sm:ml-32 ml-16">
+        <div className="w-full h-auto my-5 flex flex-col justify-center items-center">
+            <h1 className="text-2xl font-medium text-gray-700"> TESTIMONIES </h1>
+            <p className="text-[10px] font-light text-gray-500"> Get to hear what our previous users say! </p>
+            
+        </div>
+        <div className="w-full h-auto py-5 flex flex-col justify-center items-center text-gray-500">
+                <div className="w-full flex flex-col sm:flex-row justify-center sm:gap-10 gap-1 px-5 sm:px-0">
+                    <div className="text-center sm:text-end sm:ml-32 xs:ml-16 ml-0">
                         <p className="font-semibold text-xs sm:text-sm">Follow us on</p>
                         <div className="flex justify-center gap-x-2 mt-1">
                             <a href="https://www.facebook.com/OrCaDONAT/" aria-label='Facebook' target="_blank" rel="noreferrer">
@@ -101,7 +86,6 @@ function App() {
                         <p>DONAT Development Team</p>
                     </div>
                 </div>
-
                 <hr className="border-gray-300 w-1/6 my-2 mx-auto" />
                 <p className="text-[6px] sm:text-xs font-extralight">© 2025 Developers of Next Advanced Technology</p>
             </div>
