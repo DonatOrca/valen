@@ -11,7 +11,7 @@ import './styles//index.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 gsap.registerPlugin(useGSAP);
-
+gsap.ticker.lagSmoothing(0);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
