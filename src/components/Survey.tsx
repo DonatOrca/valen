@@ -6,7 +6,7 @@ export type SurveyContent = {
   // would make an interface for Constants.ts but im just lazy^
 };
 
-export function Survey({ content, onCompleted, onCompletedRender, title="Survey" }: { title?: string, content: SurveyContent[], onCompleted: (surveyOutput: string[], resetSurvey: () => void) => void, onCompletedRender: (resetSurvey: () => void) => ReactNode }) {
+export function Survey({ content, onCompleted, onCompletedRender, title="Survey", closeSurvey }: { title?: string, content: SurveyContent[], onCompleted: (surveyOutput: string[], resetSurvey: () => void) => void, onCompletedRender: (resetSurvey: () => void) => ReactNode, closeSurvey?: () => void }) {
     const [answerIndex, setAnswerIndex] = useState(0);
     const [resetting, setResettingState] = useState(false);
     const [_, setAnswers] = useState<string[]>([]);
@@ -16,7 +16,7 @@ export function Survey({ content, onCompleted, onCompletedRender, title="Survey"
         setResettingState(true);
         setAnswerIndex(0);
         setAnswers([]);
-        setTimeout(() => setResettingState(false), 0);
+        setTimeout(() => setResettingState(false), 1);
     };
 
     const handleAnswerClick = (option: string) => {
@@ -31,7 +31,7 @@ export function Survey({ content, onCompleted, onCompletedRender, title="Survey"
     const emptyContent = content[answerIndex]?.title === undefined;
 
     return (
-        <div className="flex w-full max-w-lg mx-auto p-6 min-h-[450px]">
+        <div className="flex w-full max-w-2xl mx-auto p-6 min-h-[450px]">
             <div className="relative w-12 flex flex-col items-center">
                 <div className="w-1 bg-gray-300 h-full rounded-full relative">
                     <div
@@ -48,6 +48,8 @@ export function Survey({ content, onCompleted, onCompletedRender, title="Survey"
             
             <div className={`ml-6 flex flex-col w-full ${emptyContent &&  'items-center'}`}>
                 { emptyContent ? onCompletedRender(resetSurvey) : (
+                    <>
+                    <h1 className="text-lg font-bold">{ content[answerIndex].title }</h1>
                     <div className="grid grid-cols-1 gap-2">
                         {answerIndex < totalQuestions && content[answerIndex].options.map((option, index) => (
                             <button
@@ -59,6 +61,8 @@ export function Survey({ content, onCompleted, onCompletedRender, title="Survey"
                             </button>
                         ))}
                     </div>
+                    { closeSurvey && <button className="absolute bottom-10 left-1/2 mt-2 text-xs text-red-400 hover:text-red-500 transition-colors duration-300 hover:underline" onClick={closeSurvey}> Cancel { title } </button>}
+                    </>
                 )}
             </div>
         </div>

@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import "./styles/App.css"
 import App from './App';
+import ToastProvider from './components/Toast';
 
 interface HeartsInterface {
   heart: HTMLImageElement;
@@ -155,7 +156,9 @@ function Splash() {
         </div>  
       </div>
       <div id='app' ref={appContainerRef} className='h-auto absolute w-full'>
-        <App />
+        <ToastProvider>
+          <App />
+        </ToastProvider>
       </div>
     </div>
     </>

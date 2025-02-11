@@ -7,7 +7,12 @@ import useRouter from "./components/Router";
 import { Survey } from "./components/Survey";
 import { FloatingLabel } from "./components/FloatingLabel";
 import { Proceed } from "./components/Proceed";
-import { LoveLanguageQuestionnaireData, LoveResonanceQuestionnaireData } from "./modules/Constants";
+import { LoveArchetypesData, LoveLanguageQuestionnaireData, LoveResonanceQuestionnaireData } from "./modules/Constants";
+import { get_total_numerology_score } from "./modules/NumerologyUtil";
+import NumberSpinner from "./components/NumberSpinner";
+import { useToast } from "./components/Toast";
+import { fetchSafe } from "./modules/SafeFetch";
+import AccordionItem from "./components/AccordionItem";
 
 const title_data = [
     {quote:'Embody the word of Love, are we truly meant to be?', colors: ['F5393F', "920A0E", "64070A"]},
@@ -16,34 +21,19 @@ const title_data = [
 ]
 
 function App() {
+    const { addToast } = useToast();
     const [modalOpen, setModalOpen] = useState(false);
     const [singleSurveyMode, setSingleSurveyMode] = useState(true);
-    const [surveyResults, setSurveyResults] = useState({
-        resonanceAnswers: {
-            partnerAnswers: [] as any[],
-            takerAnswers: [] as any[],
-        },
-        languageAnswers: {
-            partnerAnswers: [] as any[],
-            takerAnswers: [] as any[],
-        },
+    const [resultsAccordionIndex, setResultsAccordionIndex] = useState<number | null>(null);
+    const [firstPartner, setFirstPartnerData] = useState({
+        name: '',
+        resonanceAnswers: [] as any[],
+        languageAnswers: [] as any[],
     })
-    const [surveyTakers, setSurveyTakers] = useState({
-        takerA: '',
-        takerB: '',
-    })
-
-    const sessionSurveyDataRef = useRef({
-        firstPartner: {
-            name: '',
-            resonanceAnswers: [] as any[],
-            languageAnswers: [] as any[],
-        },
-        secondPartner: {
-            name: '',
-            resonanceAnswers: [] as any[],
-            languageAnswers: [] as any[],
-        },
+    const [secondPartner, setSecondPartnerData] = useState({
+        name: '',
+        resonanceAnswers: [] as any[],
+        languageAnswers: [] as any[],
     })
     const titleContainerRef = useRef<HTMLDivElement | null>(null);
     const textRef = useRef<HTMLParagraphElement | null>(null);
@@ -74,31 +64,7 @@ function App() {
         return () => ctx.revert();
     }, []);
 
-    useEffect(() => {
-        sessionSurveyDataRef.current.firstPartner.name = surveyTakers.takerA;
-        sessionSurveyDataRef.current.firstPartner.resonanceAnswers = surveyResults.resonanceAnswers.takerAnswers;
-        sessionSurveyDataRef.current.firstPartner.languageAnswers = surveyResults.languageAnswers.takerAnswers;
-
-        sessionSurveyDataRef.current.secondPartner.name = surveyTakers.takerB;
-        sessionSurveyDataRef.current.secondPartner.resonanceAnswers = surveyResults.resonanceAnswers.partnerAnswers;
-        sessionSurveyDataRef.current.secondPartner.languageAnswers = surveyResults.languageAnswers.partnerAnswers;
-    }, [surveyResults, surveyTakers])
-
     const resetSurveyData = useCallback(() => {
-        setSurveyTakers({
-            takerA: '',
-            takerB: '',
-        })
-        setSurveyResults({
-            resonanceAnswers: {
-                partnerAnswers: [],
-                takerAnswers: []
-            },
-            languageAnswers: {
-                partnerAnswers: [],
-                takerAnswers: []
-            },
-        })
     }, [])
 
     const resetModal = useCallback((reset?: () => void) => {
@@ -186,24 +152,25 @@ function App() {
                         const nextPage = singleSurveyMode ?
                             ( !history.firstStageAnswered ? 'languageQuiz' : 'results')
                         : ( !history.secondPartnerAnswered ? 'resonanceQuiz' : 'results')
+                        
+                        if (!completed) {
+                            setFirstPartnerData((prev) => ({ 
+                                ...prev, 
+                                name 
+                            }));
+                            setSecondPartnerData((prev) => ({ 
+                                ...prev, 
+                                name: partnerName 
+                            })); 
+                        }                   
 
-                        setSurveyTakers((prev) => {
-                            const updatedResults = { ...prev };
-                            if (singleSurveyMode) {
-                                updatedResults.takerA = name;
-                                updatedResults.takerB = partnerName;
-                            } else {
-                                if (history.firstQuizNextStage) updatedResults.takerB = name;
-                                else updatedResults.takerA = name;
-                            }
-                            return updatedResults;
-                        });
-
-                        navigate(nextPage, {
-                            ...history,
-                            firstStageAnswered: singleSurveyMode ? true : undefined,
-                        })
-                        reset();
+                        setTimeout(() => {
+                            navigate(nextPage, {
+                                ...history,
+                                firstStageAnswered: singleSurveyMode ? true : undefined,
+                            })
+                            reset();
+                        }, 0)
                     }}
                     onAbort={() => resetModal(resetAll)}
                     disabled={completed ? !consented : (singleSurveyMode
@@ -242,17 +209,29 @@ function App() {
             <Survey
                 title="Quiz"
                 content={LoveLanguageQuestionnaireData}
+                closeSurvey={() => resetModal(reset)}
                 onCompleted={(results) => {
-                    setSurveyResults((prev) => {
-                        const updatedResults = { ...prev };
-                        if (singleSurveyMode) {
-                            updatedResults.resonanceAnswers.takerAnswers = results;
-                        } else {
-                            if (history.secondPartnerAnswered) updatedResults.resonanceAnswers.partnerAnswers = results;
-                            else updatedResults.resonanceAnswers.takerAnswers = results;
-                        }
-                        return updatedResults;
-                    });
+                    if (singleSurveyMode) {
+                        setFirstPartnerData((prev) => ({
+                            ...prev,
+                            languageAnswers: results,
+                        }));
+                        setSecondPartnerData((prev) => ({
+                            ...prev,
+                            languageAnswers: results,
+                        }));
+                    } else {
+                        if (history.secondPartnerAnswered)
+                            setSecondPartnerData((prev) => ({
+                                ...prev,
+                                languageAnswers: results,
+                            }));
+                        else
+                            setFirstPartnerData((prev) => ({
+                                ...prev,
+                                languageAnswers: results,
+                            }));
+                    }
                 }}
                 onCompletedRender={(resetSurvey) => {
                     if (!singleSurveyMode || (singleSurveyMode && history.firstStageAnswered)) return (<SurveyInputField navigate={navigate} history={{ ...history }} reset={resetSurvey} resetAll={reset} />);
@@ -269,18 +248,30 @@ function App() {
             <Survey
                 title="Quiz"
                 content={LoveResonanceQuestionnaireData}
+                closeSurvey={() => resetModal(reset)}
                 onCompleted={(results, resetSurvey) => {
-                    setSurveyResults((prev) => {
-                        const updatedResults = { ...prev };
-                        if (singleSurveyMode) {
-                            updatedResults.resonanceAnswers.takerAnswers = results;
-                        } else {
-                            if (history.secondPartnerAnswered) updatedResults.resonanceAnswers.partnerAnswers = results;
-                            else updatedResults.resonanceAnswers.takerAnswers = results;
-                        }
-                        return updatedResults;
-                    });
-            
+                    if (singleSurveyMode) {
+                        setFirstPartnerData((prev) => ({
+                            ...prev,
+                            resonanceAnswers: results,
+                        }));
+                        setSecondPartnerData((prev) => ({
+                            ...prev,
+                            resonanceAnswers: results,
+                        }));
+                    } else {
+                        if (history.secondPartnerAnswered)
+                            setSecondPartnerData((prev) => ({
+                                ...prev,
+                                resonanceAnswers: results,
+                            }));
+                        else
+                            setFirstPartnerData((prev) => ({
+                                ...prev,
+                                resonanceAnswers: results,
+                            }));
+                    }
+
                     if (!singleSurveyMode) {
                         resetSurvey();
                         navigate("languageQuiz", { 
@@ -297,16 +288,75 @@ function App() {
             />
             </>
         ) },
-        results: { render: (navigate, history) => (
-            <>
+        results: { render: (navigate, history) => {
+            return (
+                <>
                 <ModalTitle>Quiz Results</ModalTitle>
                 <ModalSubtitle>Here be results!</ModalSubtitle>
+                <div className="w-full my-10 h-full grid grid-cols-2 items-center">
+                    <NumberSpinner count={history.numerologyScore} />
+                    <div className="w-full h-32 overflow-y-scroll">
+                        <p className="text-sm text-gray-600"> { history.resonanceResponse } </p>
+                    </div>
+                </div>
+                <div className="w-full h-full grid grid-cols-2 gap-x-2">
+                    <div className="w-full h-full flex flex-col justify-center">
+                        <p className="font-semibold text-lg text-gray-500 leading-[5px]"> You are a... </p>
+                        <p className="font-bold text-xl text-gray-700"> { history.languageTypeResponse } </p>
+                        <p className="font-light text-xs text-gray-400"> { history.languageResponse } </p>
+                    </div>
+                    <div className="w-full h-full space-y-2 max-w-md mx-auto">
+                        { LoveArchetypesData.map((info, index) => (
+                            <AccordionItem index={index} title={info.title} activeIndex={resultsAccordionIndex} setActiveIndex={setResultsAccordionIndex}>
+                                <div className="h-full max-h-24 w-full overflow-y-scroll accordion-scroll">
+                                    <p className="text-xs text-gray-800"> { info.description } </p>
+                                </div>
+                            </AccordionItem>
+                        ))}
+                    </div>
+                </div>
                 <button className="text-red-400 hover:text-red-700 transition duration-200 mt-2 w-full text-center" onClick={() => resetModal(reset)}>
                     Close
                 </button>
-            </>
-        ), transitioning: async () => {
+                </>
+        ) }, transitioning: async (transitionState) => {
+            if (!firstPartner?.name || !secondPartner?.name) {
+                console.error(`Error: Missing partner names. <${firstPartner?.name}, ${secondPartner?.name}>`);
+                return;
+            }
+            if (!firstPartner?.resonanceAnswers || !firstPartner?.languageAnswers) {
+                console.error("Error: Missing first partner's answers.");
+                return;
+            }
+            if (!secondPartner?.resonanceAnswers || !secondPartner?.languageAnswers) {
+                console.error("Error: Missing second partner's answers.");
+                return;
+            }
+            const numerologyScore = get_total_numerology_score(firstPartner.name, secondPartner.name);
+            const payload = {
+                firstPartner,
+                secondPartner,
+                numerologyScore,
+                singleSurveyMode,
+            };
+            let data;
+            const [ok, response] = await fetchSafe(`https://donatorca-valen-vercel.vercel.app/api/prompt-gemini-response`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+            if (!ok) {
+                addToast(response as string, "error")
+            } else data = await (response! as Response).json();
+
+            transitionState({
+                numerologyScore,
+
+                languageTypeResponse: !ok ? "Sorry, we couldn't determine that. :(" : data.results, // update this to match from the vercel app
+                languageResponse: !ok ? "We aren't sure what kind of love language you use to spoil and shower your partner with due to the current unstable connection..." : data.results, // update this to match from the vercel app
+                resonanceResponse: !ok ? "Looks like we are having trouble evaluating and giving feedback basing from your answers! We would like to apologize as we could only provide your numerology score (provided in the left) as it is determinable by locally-done operations. The quizzes you'd answered are indeterministic and complex, which requires an Artificial Intelligence model to interpret on-the-go. Happy numerology folks!" : data.result, // update this to match the data from the vercel app
             
+            })
         } },
     }, "splash");
 
@@ -350,7 +400,7 @@ function App() {
                 <p className="text-[8px] sm:text-xs mx-5 sm:mx-7 text-gray-400  xl:text-center">
                     By taking the test, you agree to provide personal information (name, gender, age, email).<br />
                     The developers are not accountable for emotional or mental outcomes following the test. <br />
-                    <b>THIS TEST WAS MADE FOR ENTERTAINMENT PURPOSES.</b>
+                    This test was made for <b>entertainment purposes</b> and requires an <b>active connection</b> due to using <a className="text-blue-500 hover:text-blue-600 transition-colors duration-300 underline" href="https://gemini.google.com/app" target="_blank" rel='noreferrer'>Gemini</a> to determine complex data <i>(ie. quiz answers)</i>.
                 </p>
             </div>
         </div>

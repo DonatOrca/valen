@@ -138,3 +138,26 @@ export const LoveResonanceQuestionnaireData = [
         ] 
     }
 ]
+
+export const LoveArchetypesData = [
+  {
+    title: "The Innocent Dreamers",
+    description: "Innocent Dreamers are visionaries who can see the future potential of a relationship clearly, even when reality doesn’t quite match. Deeply empathetic, they respond compassionately to the suffering and struggles of others. Despite past hurts, Innocent Dreamers are able to love with an open heart. Relationship challenges for Innocent Dreamers include overlooking warning signs that a relationship isn’t healthy and devaluing their own worth and value in a relationship."
+  },
+  {
+    title: "The Passionate Warrior",
+    description: "Passionate Warriors are loyal, determined, and capable. They’re able to set boundaries, express themselves, and stand up for what they think is right. Their drive and integrity allow them to move forward in the world with fierce confidence. At times, their tenacious self-reliance masks their difficulty letting down their walls and getting close to a partner. Passionate Warriors’ growth edge is learning when—and how—to drop their armor and lean on others."
+  },
+  {
+    title: "The Sunny Romantic",
+    description: "Sunny Romantics know the value of looking on the bright side. Devoted in longterm relationships and deeply sensitive, Sunny Romantics have a powerful ability to fully enjoy the pleasure of the present moment. Relationship challenges for Sunny Romantics include difficulty getting in touch with their feelings or relating to the deep feelings of partners, conflict avoidance, and a tendency to steer clear of difficult conversations in relationships."
+  },
+  {
+    title: "The Hidden Gem",
+    description: "Hidden gems are multifaceted, which empowers them to feel at home in almost any situation. They have an intuitive ability to understand others at a deep level and a commitment to personal growth. In relationships, their ability to read others translates into trying to become the person they think their partner wants, rather than being authentically themselves. Their challenge is learning how to express their full self in a single relationship."
+  },
+  {
+    title: "The Abundant Nurturer",
+    description: "Abundant Nurturers are warm, caring, and generous when it comes to meeting others’ needs.  They’re also highly capable and effective, which means that their own needs are frequently overlooked by those around them. Because they often end up in the supportive role in multiple relationships, the challenge for Abundant Nurturers is learning how to express their own needs and develop the skill of receiving as well as giving."
+  }
+]

@@ -1,7 +1,7 @@
 import { ReactNode, useRef, useState } from "react";
 
 export interface Page {
-    transitioning?: (historyState: Record<string, any>) => Promise<void> | void;  // Can be async
+    transitioning?: (transitionState: (state: Record<string, any>) => void) => Promise<void> | void;  // Can be async
     render: (navigate: (newPage: string, state?: Record<string, any>) => void, historyState: Record<string, any>, previousPage: string) => ReactNode;
 }
 
@@ -18,9 +18,10 @@ export default function useRouter(
         if (transitioning || newPage === currentPage) return;
 
         setTransitioning(true);
-        const transitionFunction = pages[currentPage]?.transitioning;
+        const transitionFunction = pages[newPage]?.transitioning;
         if (transitionFunction) {
-            await transitionFunction(historyStateRef.current);
+            console.log("Transitioning")
+            await transitionFunction((state: Record<string, any>) => historyStateRef.current = {...historyStateRef.current, ...state});
         }
 
         setPreviousPage(currentPage);
@@ -34,7 +35,7 @@ export default function useRouter(
         (
             <div className="relative w-full">
                 {transitioning && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70">
+                    <div className="absolute inset-0 z-50 flex items-center justify-center bg-white bg-opacity-70">
                         <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                     </div>
                 )}

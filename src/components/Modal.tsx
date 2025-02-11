@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 
-export const Modal = ({children, visible, size='lg'}: {children: any, visible: boolean, size?: 'sm' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl'}) => {
+export const Modal = ({children, visible, size='2xl'}: {children: any, visible: boolean, size?: 'sm' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl'}) => {
     useEffect(() => {
         if (visible) {
             document.body.classList.add("overflow-hidden");
