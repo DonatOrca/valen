@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/valen/static/css/main.cd724bc9.css",
+    "main.css": "/valen/static/css/main.3614a55d.css",
     "main.js": "/valen/static/js/main.f9621256.js",
     "static/js/488.c6cc418c.chunk.js": "/valen/static/js/488.c6cc418c.chunk.js",
     "static/media/fa-solid-900.ttf": "/valen/static/media/fa-solid-900.d75e3fd1eb12e9bd6655.ttf",
@@ -12,12 +12,12 @@
     "static/media/fa-v4compatibility.ttf": "/valen/static/media/fa-v4compatibility.c6a0c95b0a95c4553700.ttf",
     "static/media/fa-v4compatibility.woff2": "/valen/static/media/fa-v4compatibility.1bac2991f3dbfa237aec.woff2",
     "index.html": "/valen/index.html",
-    "main.cd724bc9.css.map": "/valen/static/css/main.cd724bc9.css.map",
+    "main.3614a55d.css.map": "/valen/static/css/main.3614a55d.css.map",
     "main.f9621256.js.map": "/valen/static/js/main.f9621256.js.map",
     "488.c6cc418c.chunk.js.map": "/valen/static/js/488.c6cc418c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.cd724bc9.css",
+    "static/css/main.3614a55d.css",
     "static/js/main.f9621256.js"
   ]
 }
