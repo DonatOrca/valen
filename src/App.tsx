@@ -292,11 +292,15 @@ function App() {
             return (
                 <>
                 <ModalTitle>Quiz Results</ModalTitle>
-                <ModalSubtitle>Here be results!</ModalSubtitle>
+                <ModalSubtitle>Here be the results you lovebirds!</ModalSubtitle>
+                <ModalActionTitle>{ (history.firstPartnerName as string).split(/\s+/)[0] } and { (history.secondPartnerName as string).split(/\s+/)[0] } sitting on a tree...</ModalActionTitle>
                 <div className="w-full my-10 h-full grid grid-cols-2 items-center">
-                    <NumberSpinner count={history.numerologyScore} />
+                    <div className="space-y-1">
+                        <NumberSpinner count={history.numerologyScore} />
+                        <p className="text-sm text-gray-600 font-semibold w-full text-center"> Your numerology score...</p>
+                    </div>
                     <div className="w-full h-32 overflow-y-scroll">
-                        <p className="text-sm text-gray-600"> { history.resonanceResponse } </p>
+                        <p className="text-sm text-gray-600 p-2"> { history.resonanceResponse } </p>
                     </div>
                 </div>
                 <div className="w-full h-full grid grid-cols-2 gap-x-2">
@@ -308,7 +312,7 @@ function App() {
                     <div className="w-full h-full space-y-2 max-w-md mx-auto">
                         { LoveArchetypesData.map((info, index) => (
                             <AccordionItem index={index} title={info.title} activeIndex={resultsAccordionIndex} setActiveIndex={setResultsAccordionIndex}>
-                                <div className="h-full max-h-24 w-full overflow-y-scroll accordion-scroll">
+                                <div className="h-full max-h-20 px-3 w-full overflow-y-scroll accordion-scroll">
                                     <p className="text-xs text-gray-800"> { info.description } </p>
                                 </div>
                             </AccordionItem>
@@ -319,19 +323,47 @@ function App() {
                     Close
                 </button>
                 </>
-        ) }, transitioning: async (transitionState) => {
-            if (!firstPartner?.name || !secondPartner?.name) {
-                console.error(`Error: Missing partner names. <${firstPartner?.name}, ${secondPartner?.name}>`);
+        ) }, transitioning: async (transitionState, setTransitionText) => {
+            if (!firstPartner?.name || !secondPartner?.name || !firstPartner?.resonanceAnswers || !firstPartner?.languageAnswers || !secondPartner?.resonanceAnswers || !secondPartner?.languageAnswers) {
+                resetModal(reset); // force reset
+                addToast("Cannot transition to stage 'router -> results' due to insufficient variables. Forcefully resetted the modal.", "warning")
+                return
+            };
+
+            // try to ping the server if we have any available quota or else we won't get anything
+            const checkQuota = async (): Promise<boolean> => {
+                const [ok, response] = await fetchSafe("https://donatorca-valen-vercel.vercel.app/api/prompt-gemini-response", {
+                    method: "GET",
+                });
+                if (!ok) {
+                    addToast("Failed to check quota. Please try again later.", "error");
+                    return false;
+                }
+
+                const { remainingRequestsPerMinute, remainingRequestsPerDay } = await (response! as Response).json();
+                if (remainingRequestsPerDay === 0) {
+                    addToast("Daily quota exceeded. Try again tomorrow.", "error");
+                    return false;
+                }
+
+                if (remainingRequestsPerMinute === 0) {
+                    addToast("Rate limit exceeded. Retrying in 1 minute...", "warning");
+                    let secondsLeft = 60;
+                    while (secondsLeft > 0) {
+                        setTransitionText(`Looks like we've reached a global daily queue and that we're having some setbacks in getting you to queue! We'll automatically attempt to refresh and queue back in ${secondsLeft}s.`)
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        secondsLeft--;
+                    }
+                    return await checkQuota();
+                }
+
+                return true;
+            }
+            if (!await checkQuota()) {
+                resetModal(reset);
                 return;
             }
-            if (!firstPartner?.resonanceAnswers || !firstPartner?.languageAnswers) {
-                console.error("Error: Missing first partner's answers.");
-                return;
-            }
-            if (!secondPartner?.resonanceAnswers || !secondPartner?.languageAnswers) {
-                console.error("Error: Missing second partner's answers.");
-                return;
-            }
+
             const numerologyScore = get_total_numerology_score(firstPartner.name, secondPartner.name);
             const payload = {
                 firstPartner,
@@ -348,14 +380,14 @@ function App() {
             if (!ok) {
                 addToast(response as string, "error")
             } else data = await (response! as Response).json();
-
+            if (data && data.error && typeof data.error === "string") addToast(data.error as string, "error");
             transitionState({
                 numerologyScore,
-
-                languageTypeResponse: !ok ? "Sorry, we couldn't determine that. :(" : data.results, // update this to match from the vercel app
-                languageResponse: !ok ? "We aren't sure what kind of love language you use to spoil and shower your partner with due to the current unstable connection..." : data.results, // update this to match from the vercel app
-                resonanceResponse: !ok ? "Looks like we are having trouble evaluating and giving feedback basing from your answers! We would like to apologize as we could only provide your numerology score (provided in the left) as it is determinable by locally-done operations. The quizzes you'd answered are indeterministic and complex, which requires an Artificial Intelligence model to interpret on-the-go. Happy numerology folks!" : data.result, // update this to match the data from the vercel app
-            
+                firstPartnerName: firstPartner.name,
+                secondPartnerName: secondPartner.name,
+                languageTypeResponse: data.languageArchetype || "Sorry, we couldn't determine that. :(",
+                languageResponse: data.languageResponse || "We aren't sure what kind of love language you use to spoil and shower your partner with due to the current unstable connection...",
+                resonanceResponse: data.resonanceResponse || "Looks like we are having trouble evaluating and giving feedback basing from your answers! We would like to apologize as we could only provide your numerology score (provided in the left) as it is determinable by locally-done operations. The quizzes you'd answered are indeterministic and complex, which requires an Artificial Intelligence model to interpret on-the-go. Happy numerology folks!"
             })
         } },
     }, "splash");
@@ -417,9 +449,6 @@ function App() {
                         <div className="flex justify-center gap-x-2 mt-1">
                             <a href="https://www.facebook.com/OrCaDONAT/" aria-label='Facebook' target="_blank" rel="noreferrer">
                                 <i className="fa-brands fa-facebook text-blue-500 hover:text-blue-800 transition duration-500 sm:text-xl"></i>
-                            </a>
-                            <a href="https://discord.gg/aDWE6985yC" aria-label='Discord' target="_blank" rel="noreferrer">
-                                <i className="fa-brands fa-discord text-indigo-500 hover:text-indigo-800 transition duration-500 sm:text-xl"></i>
                             </a>
                             <a href="https://github.com/DonatOrca" aria-label='Github' target="_blank" rel="noreferrer">
                                 <i className="fa-brands fa-github text-slate-600 hover:text-indigo-950 transition duration-500 sm:text-xl"></i>

@@ -154,7 +154,7 @@ export const LoveArchetypesData = [
   },
   {
     title: "The Hidden Gem",
-    description: "Hidden gems are multifaceted, which empowers them to feel at home in almost any situation. They have an intuitive ability to understand others at a deep level and a commitment to personal growth. In relationships, their ability to read others translates into trying to become the person they think their partner wants, rather than being authentically themselves. Their challenge is learning how to express their full self in a single relationship."
+    description: "Hidden Gems are multifaceted, which empowers them to feel at home in almost any situation. They have an intuitive ability to understand others at a deep level and a commitment to personal growth. In relationships, their ability to read others translates into trying to become the person they think their partner wants, rather than being authentically themselves. Their challenge is learning how to express their full self in a single relationship."
   },
   {
     title: "The Abundant Nurturer",

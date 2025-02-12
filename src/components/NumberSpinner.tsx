@@ -8,7 +8,7 @@ const itemOffset = 6;
 export default function NumberSpinner({ count }: { count: number }) {
     const numberRef = useRef<HTMLDivElement>(null);
     const numberSpanRef = useRef<HTMLSpanElement>(null);
-    const [numbers, setNumbers] = useState<number[]>([]);
+    const [numbers, setNumbers] = useState<number[]>([]);   
 
     const rollNumbers = (newValue: number) => {
         if (!numberRef.current) return;

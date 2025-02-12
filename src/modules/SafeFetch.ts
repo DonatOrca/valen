@@ -2,7 +2,8 @@
 const checkConnection = async () => {
     try {
         const response = await fetch("https://www.google.com", {
-            method: "HEAD"
+            method: "HEAD",
+            mode: 'no-cors',
         });
         return response.ok;
     } catch {
@@ -10,7 +11,7 @@ const checkConnection = async () => {
     }
 }
 
-export const fetchSafe = async (url: string, options: { method: string, headers: Record<string, string>, body: string }) => {
+export const fetchSafe = async (url: string, options: { method: "GET" | "POST", headers?: Record<string, string>, body?: string }) => {
     if (!checkConnection())
         return [false, "No Connection Found. Cannot ping for a connection."];
 
