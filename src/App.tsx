@@ -116,8 +116,8 @@ function App() {
         
         const completed = singleSurveyMode ? history.firstStageAnswered === true : history.firstPartnerAnswered && history.secondPartnerAnswered
         return (
-            <>
-                <h2 className={`text-2xl font-semibold`}>{(completed ? 'Quiz Complete!' : 'Almost there!')}</h2>
+            <div className="flex flex-col w-full h-full">
+                <h2 className={`text-2xl font-semibold w-full text-center`}>{(completed ? 'Quiz Complete!' : 'Almost there!')}</h2>
                 { getHintText() /* ambuigity fix due to ternary operators :( */ }
                 { !completed ? (
                     <>
@@ -125,7 +125,7 @@ function App() {
                         <p className="text-sm text-gray-500 font-light text-center">
                             But before that, we'd like to ask for you and your partner's name for a numerology analysis!
                         </p>
-                        <div className={`w-full grid grid-cols-1 md:grid-cols-2 gap-x-5 mt-5`}>
+                        <div className={`w-full grid grid-cols-1 md:grid-cols-2 gap-5 mt-5`}>
                             <FloatingLabel label="Your name" value={name} onChange={(e) => (setName(e.target.value))} />
                             <FloatingLabel label="Partner's name" value={partnerName} onChange={(e) => (setPartnerName(e.target.value))} />
                         </div>
@@ -176,7 +176,7 @@ function App() {
                     disabled={completed ? !consented : (singleSurveyMode
                     ? !name.trim() || !partnerName.trim()
                     : !name.trim())} />
-            </>
+            </div>
         );
     }
 

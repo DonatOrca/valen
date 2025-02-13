@@ -31,7 +31,7 @@ export function Survey({ content, onCompleted, onCompletedRender, title="Survey"
     const emptyContent = content[answerIndex]?.title === undefined;
 
     return (
-        <div className="flex w-full max-w-2xl mx-auto p-6 min-h-[450px]">
+        <div className="flex w-full max-w-2xl mx-auto p-6 min-h-[475px]">
             <div className="relative w-12 flex flex-col items-center">
                 <div className="w-1 bg-gray-300 h-full rounded-full relative">
                     <div
@@ -46,22 +46,24 @@ export function Survey({ content, onCompleted, onCompletedRender, title="Survey"
                 ))}
             </div>
             
-            <div className={`ml-6 flex flex-col w-full ${emptyContent &&  'items-center'}`}>
+            <div className={`ml-6 flex flex-col w-full justify-between ${emptyContent &&  'items-center'}`}>
                 { emptyContent ? onCompletedRender(resetSurvey) : (
                     <>
-                    <h1 className="text-lg font-bold">{ content[answerIndex].title }</h1>
-                    <div className="grid grid-cols-1 gap-2">
-                        {answerIndex < totalQuestions && content[answerIndex].options.map((option, index) => (
-                            <button
-                                key={index}
-                                className="px-4 py-2 bg-transparent text-gray-500 rounded-lg border-[1px] hover:text-gray-700 scale-100 hover:scale-105 hover:shadow-sm transition-all duration-200"
-                                onClick={() => handleAnswerClick(typeof option === "string" ? option : Object.keys(option)[0])}
-                            >
-                                {typeof option === "string" ? option : Object.keys(option)[0]}
-                            </button>
-                        ))}
+                    <div className="w-full">
+                        <h1 className="text-lg font-bold">{ content[answerIndex].title }</h1>
+                        <div className="grid grid-cols-1 gap-2">
+                            {answerIndex < totalQuestions && content[answerIndex].options.map((option, index) => (
+                                <button
+                                    key={index}
+                                    className="px-4 py-2 bg-transparent text-gray-500 rounded-lg border-[1px] hover:text-gray-700 scale-100 hover:scale-105 hover:shadow-sm transition-all duration-200"
+                                    onClick={() => handleAnswerClick(typeof option === "string" ? option : Object.keys(option)[0])}
+                                >
+                                    {typeof option === "string" ? option : Object.keys(option)[0]}
+                                </button>
+                            ))}
+                        </div>
                     </div>
-                    { closeSurvey && <button className="absolute bottom-10 left-1/2 mt-2 text-xs text-red-400 hover:text-red-500 transition-colors duration-300 hover:underline" onClick={closeSurvey}> Cancel { title } </button>}
+                    { closeSurvey && <button className="mb-2 left-1/2 mt-2 text-xs text-red-400 hover:text-red-500 transition-colors duration-300 hover:underline" onClick={closeSurvey}> Cancel { title } </button>}
                     </>
                 )}
             </div>
